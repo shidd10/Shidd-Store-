@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SHIDD - Online Store</title>
+  <meta name="description" content="SHIDD: Your online store for quality clothes, handmade crafts, and gaming gear. Order easily on WhatsApp!">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; padding: 0;
+      background: #f9f9f9;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    nav {
+      background: #444;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    nav a:hover {
+      color: #ff5722;
+    }
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 3rem;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #ff5722;
+    }
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card:hover {
+      transform: translateY(-7px) scale(1.03);
+      box-shadow: 0 4px 20px rgb(0 0 0 / 0.18);
+    }
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    .product-card:hover img {
+      transform: scale(1.07) rotate(-2deg);
+    }
+    .product-card h3 {
+      margin: 1rem 0 0.5rem;
+      font-size: 1.2rem;
+    }
+    .product-card p {
+      margin: 0.3rem 0 1rem;
+      font-weight: bold;
+      color: #222;
+      font-size: 1.1rem;
+    }
+    .btn-whatsapp {
+      background-color: #25d366;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .btn-whatsapp:hover {
+      background-color: #1ebe5b;
+    }
+    /* About and Contact */
+    .about-text, .contact-text {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #555;
+    }
+    /* Social Icons */
+    .social-links {
+      text-align: center;
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .social-links a {
+      color: #444;
+      font-size: 1.5rem;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .social-links a:hover {
+      color: #ff5722;
+    }
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: 3rem;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(34,34,34,0.70);
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.3s;
+    }
+    .modal.open {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 95vw;
+      width: 400px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      animation: modalShow 0.2s;
+    }
+    @keyframes modalShow {
+      from { transform: scale(0.89) translateY(30px);}
+      to   { transform: scale(1) translateY(0);}
+    }
+    .modal-close {
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      font-size: 1.5rem;
+      color: #ff5722;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+      font-weight: bold;
+    }
+    .modal img {
+      width: 90%;
+      max-width: 320px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 7px;
+      margin-bottom: 1rem;
+    }
+    .modal h3 {
+      margin: 0.5rem 0 0.3rem;
+      font-size: 1.25rem;
+      color: #222;
+    }
+    .modal p {
+      color: #444;
+      margin-bottom: 1rem;
+    }
+    /* Back to top button */
+    #backToTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 999;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    #backToTopBtn:hover {
+      background: #d84315;
+    }
+    /* Contact Form */
+    .contact-form {
+      max-width: 420px;
+      margin: 2rem auto 0;
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-form input, .contact-form textarea {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 0.7rem;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+    }
+    .contact-form input:focus, .contact-form textarea:focus {
+      border-color: #ff5722;
+    }
+    .contact-form button {
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .contact-form button:hover {
+      background: #d84315;
+    }
+    .form-success {
+      color: #25d366;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .form-error {
+      color: #d32f2f;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      .product-card img,
+      .modal img {
+        height: 180px;
+      }
+      .modal-content {
+        width: 95vw;
+        padding: 1rem 0.5rem;
+      }
+    }
+  </style>
+  <!-- Add FontAwesome for social icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <h1>SHIDD</h1>
+    <p>Your Online Store for Clothes, Handmade & Gaming Stuff</p>
+  </header>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#products">Products</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <main>
+    <section id="home">
+      <h2>Welcome to SHIDD</h2>
+      <p style="text-align:center; max-width:600px; margin:auto; color:#555;">
+        Discover quality clothes, unique handmade items, and the coolest gaming products—all in one place.  
+        Order easily via WhatsApp and get ready to enjoy!
+      </p>
+    </section>
+
+    <section id="products">
+      <h2>Our Products</h2>
+      <div class="products-grid">
+
+        <!-- Product 1 -->
+        <div class="product-card" tabindex="0" data-product='{"img":"https://via.placeholder.com/300x180?text=Stylish+Jacket","title":"Stylish Jacket","price":"₹1,499","desc":"A modern, versatile jacket made from premium fabric. Perfect for all seasons. Available in multiple sizes.","wa":"https://wa.me/1234567890?text=I%20am%20interested%20in%20the%20Stylish%20Jacket"}'>
+          <img src="https://via.placeholder.com/300x180?text=Stylish+Jacket" alt="Stylish Jacket" />
+          <h3>Stylish Jacket</h3>
+          <p>₹1,499</p>
+          <a href="https://wa.me/1234567890?text=I%20am%20interested%20in%20the%20Stylish%20Jacket" class="btn-whatsapp" target="_blank" rel="noopener">Order on WhatsApp</a>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card" tabindex="0" data-product='{"img":"https://via.placeholder.com/300x180?text=Handmade+Keychain","title":"Handmade Keychain","price":"₹249","desc":"Handcrafted with love. Durable, colorful, and perfect for gifting!","wa":"https://wa.me/1234567890?text=I%20am%20interested%20in%20the%20Handmade%20Keychain"}'>
+          <img src="https://via.placeholder.com/300x180?text=Handmade+Keychain" alt="Handmade Keychain" />
+          <h3>Handmade Keychain</h3>
+          <p>₹249</p>
+          <a href="https://wa.me/1234567890?text=I%20am%20interested%20in%20the%20Handmade%20Keychain" class="btn-whatsapp" target="_blank" rel="noopener">Order on WhatsApp</a>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card" tabindex="0" data-product='{"img":"https://via.placeholder.com/300x180?text=Gaming+Headset","title":"Gaming Headset","price":"₹1,999","desc":"Immersive sound, comfortable earcups, and a clear mic. Level up your gaming!","wa":"https://wa.me/1234567890?text=I%20am%20interested%20in%20the%20Gaming%20Headset"}'>
+          <img src="https://via.placeholder.com/300x180?text=Gaming+Headset" alt="Gaming Headset" />
+          <h3>Gaming Headset</h3>
+          <p>₹1,999</p>
+          <a href="https://wa.me/1234567890?text=I%20am%20interested%20in%20the%20Gaming%20Headset" class="btn-whatsapp" target="_blank" rel="noopener">Order on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>About SHIDD</h2>
+      <p class="about-text">
+        SHIDD is your go-to online store for stylish clothes, unique handmade crafts, and the best gaming gear.  
+        We are passionate about quality and customer satisfaction.  
+        Our goal is to make shopping simple, fun, and reliable.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p class="contact-text">
+        Have questions or want to place an order? Reach out to us on WhatsApp, fill the contact form, or follow us on social media!
+      </p>
+      <form class="contact-form" id="contactForm" autocomplete="off">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+        <div id="formMsg" class="form-success" style="display:none;">Thank you! We'll get back to you soon.</div>
+        <div id="formErr" class="form-error" style="display:none;">There was an error. Please try again.</div>
+      </form>
+      <div class="social-links">
+        <a href="https://wa.me/1234567890" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://instagram.com/yourprofile" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://youtube.com/yourchannel" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Product Details Modal -->
+  <div class="modal" id="productModal" aria-modal="true" role="dialog" tabindex="-1">
+    <div class="modal-content">
+      <button class="modal-close" id="modalCloseBtn" aria-label="Close">&times;</button>
+      <img src="" alt="Product Image" id="modalImg" />
+      <h3 id="modalTitle"></h3>
+      <p id="modalPrice"></p>
+      <p id="modalDesc"></p>
+      <a id="modalWA" class="btn-whatsapp" href="#" target="_blank" rel="noopener">Order on WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" title="Back to Top">&#8679;</button>
+
+  <footer>
+    &copy; <span id="year"></span> SHIDD. All rights reserved.
+  </footer>
+
+  <script>
+    // Product Modal
+    const modal = document.getElementById('productModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalWA = document.getElementById('modalWA');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    function openModal(product) {
+      modalImg.src = product.img;
+      modalImg.alt = product.title;
+      modalTitle.textContent = product.title;
+      modalPrice.textContent = product.price;
+      modalDesc.textContent = product.desc;
+      modalWA.href = product.wa;
+      modal.classList.add('open');
+      modal.focus();
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', e => {
+        // Avoid modal if clicking the WhatsApp button
+        if (e.target.closest('.btn-whatsapp')) return;
+        const data = JSON.parse(card.dataset.product);
+        openModal(data);
+      });
+      card.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          const data = JSON.parse(card.dataset.product);
+          openModal(data);
+        }
+      });
+    });
+    modalCloseBtn.onclick = closeModal;
+    modal.onclick = e => { if (e.target === modal) closeModal(); }
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
+
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    window.onscroll = function() {
+      backToTopBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    };
+    backToTopBtn.onclick = function() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+
+    // Dynamic Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Contact Form (demo only)
+    const contactForm = document.getElementById('contactForm');
+    const formMsg = document.getElementById('formMsg');
+    const formErr = document.getElementById('formErr');
+    contactForm.onsubmit = function(e) {
+      e.preventDefault();
+      formMsg.style.display = 'none';
+      formErr.style.display = 'none';
+      // Demo: Simulate a send (you'd integrate with backend/email API in real use)
+      setTimeout(() => {
+        if (Math.random() > 0.1) { // 90% success
+          formMsg.style.display = 'block';
+          contactForm.reset();
+        } else {
+          formErr.style.display = 'block';
+        }
+      }, 600);
+    };
+  </script>
+</body>
+</html>
